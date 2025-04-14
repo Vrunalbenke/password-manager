@@ -1,0 +1,36 @@
+{
+  "cesVersion": "2.14.3",
+  "projectName": "password-manager",
+  "packages": [
+    {
+      "name": "react-navigation",
+      "type": "navigation",
+      "options": {
+        "type": "stack"
+      }
+    },
+    {
+      "name": "unistyles",
+      "type": "styling"
+    }
+  ],
+  "flags": {
+    "noGit": false,
+    "noInstall": false,
+    "overwrite": false,
+    "importAlias": true,
+    "packageManager": "yarn",
+    "eas": false,
+    "publish": false
+  },
+  "packageManager": {
+    "type": "yarn",
+    "version": "1.22.19"
+  },
+  "os": {
+    "type": "Darwin",
+    "platform": "darwin",
+    "arch": "arm64",
+    "kernelVersion": "24.4.0"
+  }
+}
