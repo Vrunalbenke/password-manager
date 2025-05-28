@@ -23,7 +23,7 @@ export const darkTheme = {
   colors: {
     ...sharedColors,
     typography: '#ffffff',
-    background: '#000000',
+    background: '#1a1a1a',
   },
   margins: {
     sm: 2,

@@ -12,19 +12,7 @@ type OverviewScreenNavigationProps = StackNavigationProp<RootStackParamList, 'Ov
 export default function Overview() {
   const navigation = useNavigation<OverviewScreenNavigationProps>();
 
-  return (
-    <View style={styles.container}>
-      <ScreenContent path="screens/overview.tsx" title="Overview" />
-      <Button
-        onPress={() =>
-          navigation.navigate('Details', {
-            name: 'Dan',
-          })
-        }
-        title="Show Details"
-      />
-    </View>
-  );
+  return <View style={styles.container}></View>;
 }
 
 export const styles = StyleSheet.create((theme, rt) => ({
@@ -32,6 +20,6 @@ export const styles = StyleSheet.create((theme, rt) => ({
     flex: 1,
     padding: 24,
     backgroundColor: theme.colors.background,
-    paddingBottom: rt.insets.bottom,
+    // paddingBottom: rt.insets.bottom,
   },
 }));

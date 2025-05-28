@@ -8,6 +8,7 @@ module.exports = function (api) {
       autoProcessRoot: 'app',
       autoProcessImports: ['~/components'],
     },
+    'react-native-reanimated/plugin',
   ]);
 
   return {
