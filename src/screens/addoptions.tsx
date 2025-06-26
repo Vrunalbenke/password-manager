@@ -1,9 +1,9 @@
-import Icon from 'components/Icon';
-import { Colors } from 'constants/color';
+import Icon from '~/components/Icon';
+import { Colors } from '~/constants/color';
 import { Text, View } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native-unistyles';
-import { wp } from 'utils/ResponsiveSize';
+import { wp } from '~/utils/ResponsiveSize';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 const data = [
   { title: 'Password', icon: 'RectangleEllipsis' },

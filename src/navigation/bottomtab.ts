@@ -1,7 +1,9 @@
 import { createNativeBottomTabNavigator } from '@bottom-tabs/react-navigation';
-import { Colors } from 'constants/color';
-import About from 'screens/about';
-import Home from 'screens/home';
+import { UnistylesRuntime } from 'react-native-unistyles';
+
+import { Colors } from '~/constants/color';
+import About from '~/screens/about';
+import Home from '~/screens/home';
 
 const BottomTab = createNativeBottomTabNavigator({
   initialRouteName: 'Home',
@@ -11,11 +13,11 @@ const BottomTab = createNativeBottomTabNavigator({
   disablePageAnimations: false,
   labeled: true,
   tabBarActiveTintColor: Colors.matrixGreen,
-  tabBarInactiveTintColor: Colors.white,
+  tabBarInactiveTintColor: UnistylesRuntime.getTheme().colors.typography,
   tabBarStyle: {
-    backgroundColor: Colors.darkGray,
+    backgroundColor: UnistylesRuntime.getTheme().colors.background,
   },
-  activeIndicatorColor: '#4BC489',
+  activeIndicatorColor: 'rgba(3, 160, 97,0.4)',
   // rippleColor: Colors.lightOrange,
   hapticFeedbackEnabled: true,
   tabLabelStyle: {
@@ -26,13 +28,13 @@ const BottomTab = createNativeBottomTabNavigator({
     Home: {
       screen: Home,
       options: {
-        // tabBarIcon: () => require('../../assets/svg/home.svg'),
+        tabBarIcon: () => require('../../assets/svg/house.svg'),
       },
     },
     About: {
       screen: About,
       options: {
-        // tabBarIcon: () => require('../../assets/svg/chat.svg'),
+        tabBarIcon: () => require('../../assets/svg/settings.svg'),
       },
     },
   },

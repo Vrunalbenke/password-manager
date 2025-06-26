@@ -1,10 +1,10 @@
-import { Colors } from 'constants/color';
+import { Colors } from '~/constants/color';
 import { EyeOff, Eye } from 'lucide-react-native';
 import { Dispatch, memo, SetStateAction, useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { Image, Pressable, StyleProp, Text, TextInput, View, ViewStyle } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
-import { wp } from 'utils/ResponsiveSize';
+import { wp } from '~/utils/ResponsiveSize';
 
 interface UserInputProps {
   label: string;

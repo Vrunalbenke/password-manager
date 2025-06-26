@@ -1,10 +1,10 @@
-import { Colors } from 'constants/color';
-import { EyeOff, Eye } from 'lucide-react-native';
+import { Colors } from '~/constants/color';
+import { EyeOff, Eye, CircleX } from 'lucide-react-native';
 import { memo, useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { Image, Pressable, StyleProp, Text, TextInput, View, ViewStyle } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
-import { wp } from 'utils/ResponsiveSize';
+import { wp } from '~/utils/ResponsiveSize';
 
 type UserTextInputProps<FormFieldValues extends FieldValues> = {
   control: Control<FormFieldValues>;
@@ -26,6 +26,8 @@ type UserTextInputProps<FormFieldValues extends FieldValues> = {
   maxLength?: number;
   size?: number;
   isPassword?: boolean;
+  isClear?: boolean;
+  onClear?: () => void;
 };
 const FormInput = <FormFieldValues extends FieldValues>({
   control,
@@ -40,6 +42,8 @@ const FormInput = <FormFieldValues extends FieldValues>({
   maxLength,
   isPassword = false,
   multiline = false,
+  isClear = false,
+  onClear,
 }: UserTextInputProps<FormFieldValues>) => {
   const [toggleIcon, setToggleIcon] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
@@ -71,6 +75,7 @@ const FormInput = <FormFieldValues extends FieldValues>({
                 autoComplete="sms-otp"
                 maxLength={maxLength}
                 multiline={multiline}
+                numberOfLines={multiline ? 4 : 1}
               />
             </View>
             {isPassword && (
@@ -82,6 +87,11 @@ const FormInput = <FormFieldValues extends FieldValues>({
                 ) : (
                   <Eye size={wp(7)} color={Colors.mediumGray} />
                 )}
+              </Pressable>
+            )}
+            {isClear && (
+              <Pressable style={styles.IconPressable} onPress={onClear}>
+                <CircleX size={wp(7)} color={Colors.mediumGray} />
               </Pressable>
             )}
           </View>

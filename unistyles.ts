@@ -22,6 +22,7 @@ StyleSheet.configure({
     dark: darkTheme,
   },
   settings: {
-    initialTheme: 'dark',
+    // initialTheme: 'dark',
+    adaptiveThemes: true,
   },
 });

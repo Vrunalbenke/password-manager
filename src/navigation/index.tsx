@@ -1,7 +1,8 @@
 import { createStaticNavigation } from '@react-navigation/native';
-import { navigationRef } from 'utils/Navigation';
 
 import NativeStack from './nativestack';
+
+import { navigationRef } from '~/utils/Navigation';
 
 const Navigation = createStaticNavigation(NativeStack);
 

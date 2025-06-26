@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { ScreenContent } from 'components/ScreenContent';
+import { ScreenContent } from '~/components/ScreenContent';
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
