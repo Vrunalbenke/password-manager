@@ -2,7 +2,7 @@ import { ArrowRight } from 'lucide-react-native';
 import { memo } from 'react';
 import { Text, View } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
-import { StyleSheet, UnistylesRuntime, withUnistyles } from 'react-native-unistyles';
+import { StyleSheet } from 'react-native-unistyles';
 
 import { wp } from '~/utils/ResponsiveSize';
 
@@ -11,9 +11,11 @@ type CardColorKey = `card${1 | 2 | 3 | 4}`;
 type CategoryBoxProps = {
   bgColor: 1 | 2 | 3 | 4; // Assuming these are the card colors
   title: string;
+  totalCount: number;
+  onPress: () => void;
 };
 
-const CategoryBox = ({ bgColor, title }: CategoryBoxProps) => {
+const CategoryBox = ({ bgColor, title, totalCount, onPress }: CategoryBoxProps) => {
   return (
     <View style={styles.container(bgColor)}>
       <Text style={styles.title} numberOfLines={1}>
@@ -22,11 +24,11 @@ const CategoryBox = ({ bgColor, title }: CategoryBoxProps) => {
 
       <View style={styles.bottomContainer}>
         <View>
-          <Text style={styles.count}>{Math.floor(Math.random() * 10)}</Text>
+          <Text style={styles.count}>{totalCount}</Text>
           <Text style={styles.label}>Items</Text>
         </View>
 
-        <RectButton style={styles.iconButton}>
+        <RectButton style={styles.iconButton} onPress={onPress}>
           <ArrowRight style={styles.arrowIcon} size={wp(5.5)} />
         </RectButton>
       </View>

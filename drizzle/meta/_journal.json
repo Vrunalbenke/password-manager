@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1750917368400,
+      "tag": "0000_panoramic_doctor_strange",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1750934190956,
+      "tag": "0001_overjoyed_northstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1750942244543,
+      "tag": "0002_petite_cardiac",
+      "breakpoints": true
+    }
+  ]
+}

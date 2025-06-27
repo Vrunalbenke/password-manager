@@ -6,4 +6,6 @@ export const PasswordSchema = z.object({
   key: z.string(),
   password: z.string(),
   note: z.string().optional(),
+  tags: z.array(z.string().optional()),
+  tag: z.string().optional(),
 });

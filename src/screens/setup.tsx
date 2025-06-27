@@ -1,12 +1,11 @@
 import { set } from '@op-engineering/op-s2';
+import { db } from 'App';
+import { AppMeta } from 'db/schema';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Alert, Platform } from 'react-native';
-import { generateSecureRandom } from 'react-native-securerandom';
-import { StyleSheet } from 'react-native-unistyles';
-
-import { db } from 'App';
 import QuickCrypto, { BinaryLike } from 'react-native-quick-crypto';
+import { StyleSheet } from 'react-native-unistyles';
 
 import { Button } from '~/components/Button';
 import UserInput from '~/components/UserInput';
@@ -15,6 +14,7 @@ import { navigate } from '~/utils/Navigation';
 import { wp } from '~/utils/ResponsiveSize';
 
 const MasterKeySetup = () => {
+  const [name, setName] = useState('');
   const [masterKey, setMasterKey] = useState('');
   const [confirmMasterKey, setConfirmMasterKey] = useState('');
   const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
@@ -67,7 +67,7 @@ const MasterKeySetup = () => {
       set({
         key: 'derived_key_hex',
         value: derivedKey.toString('hex'),
-        withBiometrics: true,
+        withBiometrics: false,
       });
 
       set({
@@ -82,9 +82,16 @@ const MasterKeySetup = () => {
         withBiometrics: false,
       });
 
-      db.transaction((tx) => {
-        tx.execute('INSERT INTO LoginDetails (is_setup) VALUES (1)', []);
-      });
+      const appMetaData: typeof AppMeta.$inferInsert = {
+        salt_hex: saltHex,
+        username: name || null,
+        created_at: new Date().toISOString(),
+      };
+      const insertResult = await db.insert(AppMeta).values(appMetaData);
+
+      debugger;
+      console.log('AppMeta Insert Result:', insertResult);
+      // debugger;
 
       navigate('BottomTab', {
         screen: 'Home',
@@ -116,6 +123,18 @@ const MasterKeySetup = () => {
           • The master key never leaves your device and isn't shared with anyone
         </Text>
       </View>
+
+      <UserInput
+        value={name}
+        onChangeText={setName}
+        error={error.key}
+        inputMode="text"
+        label="Name (optional)"
+        placeholder="Gangaram tilak"
+        maxLength={32}
+        TextInputContainerStyle={styles.inputContainer}
+        TextInputStyle={styles.input}
+      />
 
       <UserInput
         value={masterKey}

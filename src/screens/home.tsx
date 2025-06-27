@@ -15,6 +15,9 @@ import Icon from '~/components/Icon';
 import { Colors } from '~/constants/color';
 import { navigate } from '~/utils/Navigation';
 import { wp } from '~/utils/ResponsiveSize';
+import { count } from 'drizzle-orm';
+import { AtmPin, CreditCard, CryptoKey, Password } from 'db/schema';
+import { set } from 'react-hook-form';
 
 const data = [
   { title: 'Password', icon: 'RectangleEllipsis' },
@@ -26,6 +29,12 @@ const Home = ({}) => {
   const [list, setList] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [theme, setTheme] = useState('dark');
+  const [totalCount, setTotalCount] = useState({
+    password: 0,
+    cryptokey: 0,
+    creditcard: 0,
+    atmpin: 0,
+  });
   const AnimatedPlus = Animated.createAnimatedComponent(Plus);
   const rotate = useSharedValue(false);
   const opacity = useSharedValue(0);
@@ -34,20 +43,18 @@ const Home = ({}) => {
   const notesTransY = useSharedValue(0);
 
   useEffect(() => {
-    const resp = db.execute('SELECT * FROM PasswordGroup');
-
-    resp.rows?._array.forEach((element) => {
-      const idPass = db.execute('SELECT * FROM PasswordEntry WHERE group_id = ?', [
-        element.brandId,
-      ]);
-      console.log(idPass.rows?._array, 'idPass');
-      setList((prev) => [
-        ...prev,
-        { title: element.brand, domain: element.domain, data: idPass.rows?._array },
-      ]);
-    });
-
-    console.log(resp.rows, 'Database initialized successfully');
+    // const resp = db.execute('SELECT * FROM PasswordGroup');
+    // resp.rows?._array.forEach((element) => {
+    //   const idPass = db.execute('SELECT * FROM PasswordEntry WHERE group_id = ?', [
+    //     element.brandId,
+    //   ]);
+    //   console.log(idPass.rows?._array, 'idPass');
+    //   setList((prev) => [
+    //     ...prev,
+    //     { title: element.brand, domain: element.domain, data: idPass.rows?._array },
+    //   ]);
+    // });
+    // console.log(resp.rows, 'Database initialized successfully');
   }, []);
 
   const handleAdd = () => {
@@ -90,17 +97,34 @@ const Home = ({}) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log('💿💿💿💿');
-      setSearch('');
-      const resp = db.execute('SELECT * FROM PasswordGroup');
-      const newList = resp.rows?._array.map((element) => {
-        const idPass = db.execute('SELECT * FROM PasswordEntry WHERE group_id = ?', [
-          element.brandId,
-        ]);
-        return { title: element.brand, domain: element.domain, data: idPass.rows?._array };
-      });
-      setList(newList);
-    }, []) // Empty dependency array ensures it runs only once per focus
+      const fetchData = async () => {
+        console.log('💿💿💿💿');
+        setSearch('');
+        const totalPasswords = await db.select({ count: count() }).from(Password);
+        const totalCreditCards = await db.select({ count: count() }).from(CreditCard);
+        const totalATMPins = await db.select({ count: count() }).from(AtmPin);
+        const totalCrytoKeys = await db.select({ count: count() }).from(CryptoKey); // Assuming you have a table for crypto keys
+
+        console.log(totalPasswords[0].count, ' is total number of passwords');
+        setTotalCount({
+          password: totalPasswords[0].count,
+          cryptokey: totalCrytoKeys[0].count,
+          creditcard: totalCreditCards[0].count,
+          atmpin: totalATMPins[0].count,
+        });
+
+        // const resp = db.execute('SELECT * FROM PasswordGroup');
+        // const newList = resp.rows?._array.map((element) => {
+        //   const idPass = db.execute('SELECT * FROM PasswordEntry WHERE group_id = ?', [
+        //     element.brandId,
+        //   ]);
+        //   return { title: element.brand, domain: element.domain, data: idPass.rows?._array };
+        // });
+        // setList(newList);
+      };
+
+      fetchData();
+    }, [])
   );
 
   const handleSearch = useCallback(
@@ -183,14 +207,38 @@ const Home = ({}) => {
       return 'Good Evening';
     }
   };
+
+  const handleNavigate = (screen) => {
+    navigate(screen);
+  };
   return (
     <View style={styles.root}>
       <Text style={styles.greeting}>{getGreeting()}</Text>
       <View style={styles.categoryContainer}>
-        <CategoryBox bgColor={1} title="Passwords" />
-        <CategoryBox bgColor={2} title="Notes" />
-        <CategoryBox bgColor={3} title="Credit Cards" />
-        <CategoryBox bgColor={4} title="Secure Notes" />
+        <CategoryBox
+          bgColor={1}
+          title="Passwords"
+          totalCount={totalCount.password}
+          onPress={() => handleNavigate('Passwords')}
+        />
+        <CategoryBox
+          bgColor={2}
+          title="Crypto Keys"
+          totalCount={totalCount.cryptokey}
+          onPress={() => handleNavigate('Passwords')}
+        />
+        <CategoryBox
+          bgColor={3}
+          title="Credit Cards"
+          totalCount={totalCount.creditcard}
+          onPress={() => handleNavigate('Passwords')}
+        />
+        <CategoryBox
+          bgColor={4}
+          title="ATM Pin"
+          totalCount={totalCount.atmpin}
+          onPress={() => handleNavigate('Passwords')}
+        />
       </View>
 
       <View>
@@ -252,7 +300,7 @@ const Home = ({}) => {
         </RectButton>
 
         <Animated.View style={[styles.optioncontainer, PassAnimatedStyle]}>
-          <RectButton style={styles.optionbtn} onPress={() => navigate('Password')}>
+          <RectButton style={styles.optionbtn} onPress={() => navigate('AddPassword')}>
             <Icon name={data[0].icon} size={wp(8)} color={Colors.white} />
           </RectButton>
           <Text style={styles.optiontext}>{data[0].title}</Text>

@@ -4,11 +4,12 @@ import { UnistylesRuntime } from 'react-native-unistyles';
 import BottomTab from './bottomtab';
 
 import AddOptions from '~/screens/addoptions';
+import AddPassword from '~/screens/addpassword';
 import Details from '~/screens/details';
 import Onboarding from '~/screens/onboarding';
 import Overview from '~/screens/overview';
-import Password from '~/screens/password';
 import PasswordDetail from '~/screens/passworddetail';
+import Passwords from '~/screens/passwords';
 import MasterKeySetup from '~/screens/setup';
 import Splashscreen from '~/screens/splashscreen';
 
@@ -20,17 +21,17 @@ export type RootStackParamList = {
   Splashscreen: undefined;
   Onboarding: undefined;
   AddOptions: undefined;
-  Password: undefined;
+  Passwords: undefined;
+  AddPassword: undefined;
   PasswordDetail: {
-    entry: {
-      brand: string;
-      url: string;
-      key: string;
-      encrypted_password: string;
-      note: string;
-      username: string;
-      iv: string;
-    };
+    passwordId: number;
+    brand: string;
+    logo: string;
+    key: string;
+    encrypted_password: string;
+    note: string;
+    username: string;
+    iv_hex: string;
     domain?: string;
     title?: string;
   };
@@ -44,6 +45,7 @@ const NativeStack = createNativeStackNavigator<RootStackParamList>({
     MasterKeySetup,
     Overview,
     Details,
+    Passwords,
     PasswordDetail,
     BottomTab: {
       screen: BottomTab,
@@ -53,7 +55,7 @@ const NativeStack = createNativeStackNavigator<RootStackParamList>({
         statusBarStyle: 'dark',
       },
     },
-    Password,
+    AddPassword,
     AddOptions: {
       screen: AddOptions,
       options: {

@@ -1,5 +1,5 @@
-import { get } from '@op-engineering/op-s2';
 import { db } from 'App';
+import { AppMeta } from 'db/schema';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useEffect } from 'react';
 import { Alert, Platform, Text, View } from 'react-native';
@@ -38,54 +38,28 @@ const Splashscreen = () => {
       }
       console.log('Hello from Splashscreen');
 
-      db.transaction((tx) => {
-        tx.execute(`
-        CREATE TABLE IF NOT EXISTS LoginDetails (
-          is_setup INTEGER DEFAULT 0
-        );
-        
-        `);
-        tx.execute(`
-        CREATE TABLE IF NOT EXISTS PasswordGroup (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          brandId TEXT NOT NULL,
-          brand TEXT NOT NULL,
-          domain TEXT NOT NULL,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        );
-      `);
+      // Check if setup is complete
+      try {
+        const result = await db
+          .select({
+            saltHex: AppMeta.salt_hex,
+          })
+          .from(AppMeta);
 
-        // Create PasswordEntry table
-        tx.execute(`
-        CREATE TABLE IF NOT EXISTS PasswordEntry (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          group_id INTEGER NOT NULL,
-          username TEXT NOT NULL,
-          encrypted_password TEXT NOT NULL,
-          iv TEXT NOT NULL,
-          note TEXT,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (group_id) REFERENCES PasswordGroup(id) ON DELETE CASCADE
-        );
-      `);
-      })
-        .then(() => {
-          // Check if setup is complete
-          const result = db.execute('SELECT is_setup FROM LoginDetails LIMIT 1');
+        const appData = await db.select().from(AppMeta);
 
-          if (result.rows?.length > 0) {
-            const isSetup = result.rows.item(0).is_setup === 1;
-            isSetup
-              ? resetAndNavigate('BottomTab', { screen: 'Home' })
-              : resetAndNavigate('Onboarding');
-          } else {
-            resetAndNavigate('Onboarding');
-          }
-        })
-        .catch((error) => {
-          console.error('Database error:', error);
-          resetAndNavigate('Onboarding');
-        });
+        console.log(result, ' Me bhi nacho ', appData);
+
+        // if (result?.rows?.length > 0) {
+
+        result[0]?.saltHex
+          ? resetAndNavigate('BottomTab', { screen: 'Home' })
+          : resetAndNavigate('Onboarding');
+        // }
+      } catch (error) {
+        console.error(error);
+        resetAndNavigate('Onboarding');
+      }
     };
 
     authenticate();
