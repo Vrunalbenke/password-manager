@@ -67,7 +67,7 @@ const MasterKeySetup = () => {
       set({
         key: 'derived_key_hex',
         value: derivedKey.toString('hex'),
-        withBiometrics: false,
+        withBiometrics: !__DEV__,
       });
 
       set({
@@ -89,7 +89,6 @@ const MasterKeySetup = () => {
       };
       const insertResult = await db.insert(AppMeta).values(appMetaData);
 
-      debugger;
       console.log('AppMeta Insert Result:', insertResult);
       // debugger;
 

@@ -97,7 +97,7 @@ const AddPassword = () => {
     console.log('QWERTYUIO', data);
     const { value, error } = get({
       key: 'derived_key_hex',
-      withBiometrics: false,
+      withBiometrics: !__DEV__,
     });
 
     console.log(value, 'value from secure storage');

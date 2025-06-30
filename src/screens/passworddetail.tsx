@@ -30,7 +30,7 @@ const PasswordDetail = ({ route }: Props) => {
     try {
       const { value, error } = get({
         key: 'derived_key_hex',
-        withBiometrics: false,
+        withBiometrics: !__DEV__,
       });
 
       if (error) {

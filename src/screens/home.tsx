@@ -1,31 +1,23 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
-import { ArrowRight, Plus, Search } from 'lucide-react-native';
+import { db } from 'App';
+import { AppMeta, AtmPin, CreditCard, CryptoKey, Password } from 'db/schema';
+import { count } from 'drizzle-orm';
+import { ArrowRight, Search } from 'lucide-react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { Image, Switch, Text, TextInput, View } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { StyleSheet, UnistylesRuntime } from 'react-native-unistyles';
-
-import { db } from 'App';
 
 import CategoryBox from '~/components/CategoryBox';
 import DropDown from '~/components/DropDown';
-import Icon from '~/components/Icon';
+import FAB from '~/components/FAB';
 import { Colors } from '~/constants/color';
 import { navigate } from '~/utils/Navigation';
 import { wp } from '~/utils/ResponsiveSize';
-import { count } from 'drizzle-orm';
-import { AtmPin, CreditCard, CryptoKey, Password } from 'db/schema';
-import { set } from 'react-hook-form';
-
-const data = [
-  { title: 'Password', icon: 'RectangleEllipsis' },
-  { title: 'Crypto Key', icon: 'Wallet' },
-  { title: 'Note', icon: 'NotepadTextDashed' },
-];
 
 const Home = ({}) => {
+  const [name, setName] = useState('');
   const [list, setList] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [theme, setTheme] = useState('dark');
@@ -35,65 +27,15 @@ const Home = ({}) => {
     creditcard: 0,
     atmpin: 0,
   });
-  const AnimatedPlus = Animated.createAnimatedComponent(Plus);
-  const rotate = useSharedValue(false);
-  const opacity = useSharedValue(0);
-  const passTransY = useSharedValue(0);
-  const cryptoTransY = useSharedValue(0);
-  const notesTransY = useSharedValue(0);
 
-  useEffect(() => {
-    // const resp = db.execute('SELECT * FROM PasswordGroup');
-    // resp.rows?._array.forEach((element) => {
-    //   const idPass = db.execute('SELECT * FROM PasswordEntry WHERE group_id = ?', [
-    //     element.brandId,
-    //   ]);
-    //   console.log(idPass.rows?._array, 'idPass');
-    //   setList((prev) => [
-    //     ...prev,
-    //     { title: element.brand, domain: element.domain, data: idPass.rows?._array },
-    //   ]);
-    // });
-    // console.log(resp.rows, 'Database initialized successfully');
-  }, []);
-
-  const handleAdd = () => {
-    rotate.value = !rotate.value;
-    if (!rotate.value) {
-      opacity.value = withTiming(1);
-      passTransY.value = withTiming(-90);
-      cryptoTransY.value = withTiming(-180);
-      notesTransY.value = withTiming(-270);
-    } else {
-      opacity.value = withTiming(0);
-      passTransY.value = withTiming(10);
-      cryptoTransY.value = withTiming(10);
-      notesTransY.value = withTiming(10);
-    }
+  const getName = async () => {
+    const username = await db.select({ user: AppMeta.username }).from(AppMeta);
+    console.log('username', username);
+    setName(username[0].user);
   };
-
-  const PassAnimatedStyle = useAnimatedStyle(() => ({
-    position: 'absolute',
-    transform: [{ translateY: passTransY.value }, { translateY: 0 }],
-    opacity: opacity.value,
-  }));
-  const CryptoAnimatedStyle = useAnimatedStyle(() => ({
-    position: 'absolute',
-    transform: [{ translateY: cryptoTransY.value }, { translateY: 0 }],
-    opacity: opacity.value,
-  }));
-  const NoteAnimatedStyle = useAnimatedStyle(() => ({
-    position: 'absolute',
-    transform: [{ translateY: notesTransY.value }, { translateY: 0 }],
-    opacity: opacity.value,
-  }));
-
-  const AddAnimatedStyle = useAnimatedStyle(() => {
-    const isExpanded = rotate.value ? '45deg' : '0deg';
-    return {
-      transform: [{ rotate: withTiming(isExpanded) }],
-    };
-  });
+  useEffect(() => {
+    getName();
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -200,11 +142,11 @@ const Home = ({}) => {
     const hour = new Date().getHours();
 
     if (hour < 12) {
-      return 'Good Morning';
+      return `Good Morning, ${name}`;
     } else if (hour < 18) {
-      return 'Good Afternoon';
+      return `Good Afternoon, ${name}`;
     } else {
-      return 'Good Evening';
+      return `Good Evening, ${name}`;
     }
   };
 
@@ -289,35 +231,8 @@ const Home = ({}) => {
           showsVerticalScrollIndicator={false}
         />
       </View> */}
-      <View style={styles.optionscontainer}>
-        <RectButton style={[styles.addbtn]} onPress={handleAdd}>
-          <AnimatedPlus
-            size={wp(12)}
-            fill={Colors.matrixGreen}
-            color={Colors.white}
-            style={AddAnimatedStyle}
-          />
-        </RectButton>
 
-        <Animated.View style={[styles.optioncontainer, PassAnimatedStyle]}>
-          <RectButton style={styles.optionbtn} onPress={() => navigate('AddPassword')}>
-            <Icon name={data[0].icon} size={wp(8)} color={Colors.white} />
-          </RectButton>
-          <Text style={styles.optiontext}>{data[0].title}</Text>
-        </Animated.View>
-        <Animated.View style={[styles.optioncontainer, CryptoAnimatedStyle]}>
-          <RectButton style={styles.optionbtn}>
-            <Icon name={data[1].icon} size={wp(8)} color={Colors.white} />
-          </RectButton>
-          <Text style={styles.optiontext}>{data[1].title}</Text>
-        </Animated.View>
-        <Animated.View style={[styles.optioncontainer, NoteAnimatedStyle]}>
-          <RectButton style={styles.optionbtn}>
-            <Icon name={data[2].icon} size={wp(8)} color={Colors.white} />
-          </RectButton>
-          <Text style={styles.optiontext}>{data[2].title}</Text>
-        </Animated.View>
-      </View>
+      <FAB />
     </View>
   );
 };
@@ -395,47 +310,5 @@ const styles = StyleSheet.create((theme) => ({
     fontSize: wp(4),
     fontWeight: '400',
     color: theme.colors.typography,
-  },
-  addbtn: {
-    // position: 'absolute',
-    // bottom: wp(4),
-    // right: wp(4),
-    backgroundColor: Colors.matrixGreen,
-    borderRadius: wp(6),
-    zIndex: 10,
-    width: wp(12),
-  },
-  optionscontainer: {
-    position: 'absolute',
-    bottom: wp(4),
-    right: wp(5),
-    zIndex: 2,
-    width: wp(15),
-    // justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'pink',
-  },
-  optioncontainer: {
-    gap: wp(2),
-    width: wp(15),
-    // bottom: wp(4),
-    // right: wp(4),
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'red',
-  },
-  optionbtn: {
-    width: wp(12),
-    backgroundColor: Colors.matrixGreen,
-    borderRadius: wp(6),
-    padding: wp(2),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  optiontext: {
-    fontSize: wp(3),
-    fontWeight: '400',
-    color: theme.colors.typography,
-    textAlign: 'center',
   },
 }));
