@@ -1,0 +1,1 @@
+ALTER TABLE `app_meta` ADD `updated_at` text DEFAULT 'CURRENT_TIMESTAMP' NOT NULL;

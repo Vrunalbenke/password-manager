@@ -10,7 +10,7 @@ export const lightTheme = {
     ...sharedColors,
     typography: '#1A1A1A',
     secondary: '#555555',
-    background: '#FCF5C7',
+    background: '#FFF',
     card1: '#79ADDC', // Previously "Passwords"
     card2: '#FFC09F', // Previously "Notes"
     card3: '#E4FFEA', // Previously "Credit cards"

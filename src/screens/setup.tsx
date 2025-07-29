@@ -87,6 +87,8 @@ const MasterKeySetup = () => {
         username: name || null,
         created_at: new Date().toISOString(),
       };
+      console.log(db.insert(AppMeta).values(appMetaData).toSQL());
+      debugger;
       const insertResult = await db.insert(AppMeta).values(appMetaData);
 
       console.log('AppMeta Insert Result:', insertResult);

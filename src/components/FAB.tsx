@@ -88,7 +88,7 @@ const FAB = () => {
           <Text style={styles.optiontext}>{data[0].title}</Text>
         </Animated.View>
         <Animated.View style={[styles.optioncontainer, CryptoAnimatedStyle]}>
-          <RectButton style={styles.optionbtn}>
+          <RectButton style={styles.optionbtn} onPress={() => navigate('AddCryptoKey')}>
             <Icon name={data[1].icon} size={wp(8)} color={Colors.white} />
           </RectButton>
           <Text style={styles.optiontext}>{data[1].title}</Text>

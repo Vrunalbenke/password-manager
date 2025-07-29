@@ -12,6 +12,7 @@ import PasswordDetail from '~/screens/passworddetail';
 import Passwords from '~/screens/passwords';
 import MasterKeySetup from '~/screens/setup';
 import Splashscreen from '~/screens/splashscreen';
+import AddCryptoKey from '~/screens/addcryptokey';
 
 export type RootStackParamList = {
   Overview: undefined;
@@ -35,6 +36,7 @@ export type RootStackParamList = {
     domain?: string;
     title?: string;
   };
+  AddCryptoKey: undefined;
 };
 
 const NativeStack = createNativeStackNavigator<RootStackParamList>({
@@ -47,12 +49,13 @@ const NativeStack = createNativeStackNavigator<RootStackParamList>({
     Details,
     Passwords,
     PasswordDetail,
+    AddCryptoKey,
     BottomTab: {
       screen: BottomTab,
       options: {
         navigationBarHidden: true,
-        statusBarBackgroundColor: UnistylesRuntime.getTheme().colors.background,
-        statusBarStyle: 'dark',
+        // statusBarBackgroundColor: UnistylesRuntime.getTheme().colors.background,
+        // statusBarStyle: 'dark',
       },
     },
     AddPassword,

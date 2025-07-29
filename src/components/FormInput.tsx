@@ -1,5 +1,5 @@
 import { Colors } from '~/constants/color';
-import { EyeOff, Eye, CircleX } from 'lucide-react-native';
+import { EyeOff, Eye, CircleX, ChevronDown } from 'lucide-react-native';
 import { memo, useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { Image, Pressable, StyleProp, Text, TextInput, View, ViewStyle } from 'react-native';
@@ -28,6 +28,8 @@ type UserTextInputProps<FormFieldValues extends FieldValues> = {
   isPassword?: boolean;
   isClear?: boolean;
   onClear?: () => void;
+  isDropdown?: boolean;
+  onDropdownPress?: () => void;
 };
 const FormInput = <FormFieldValues extends FieldValues>({
   control,
@@ -43,7 +45,9 @@ const FormInput = <FormFieldValues extends FieldValues>({
   isPassword = false,
   multiline = false,
   isClear = false,
+  isDropdown = false,
   onClear,
+  onDropdownPress,
 }: UserTextInputProps<FormFieldValues>) => {
   const [toggleIcon, setToggleIcon] = useState(true);
   const [isFocused, setIsFocused] = useState(false);
@@ -92,6 +96,11 @@ const FormInput = <FormFieldValues extends FieldValues>({
             {isClear && (
               <Pressable style={styles.IconPressable} onPress={onClear}>
                 <CircleX size={wp(7)} color={Colors.mediumGray} />
+              </Pressable>
+            )}
+            {isDropdown && (
+              <Pressable style={styles.IconPressable} onPress={onDropdownPress}>
+                <ChevronDown size={wp(7)} color={Colors.mediumGray} />
               </Pressable>
             )}
           </View>

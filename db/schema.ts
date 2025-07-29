@@ -6,6 +6,7 @@ export const AppMeta = sqliteTable('app_meta', {
   salt_hex: text('salt_hex').notNull(),
   username: text('username'),
   created_at: text('created_at').default('CURRENT_TIMESTAMP').notNull(),
+  updated_at: text('updated_at').default('CURRENT_TIMESTAMP').notNull(),
 });
 
 //Brand ↔ Password relation
